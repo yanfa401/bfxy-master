@@ -60,7 +60,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <!-- dubbo -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
             <version>${dubbo.version}</version>
@@ -69,13 +69,7 @@
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-actuator</artifactId>
             <version>${dubbo.version}</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>com.bfxy</groupId>
-            <artifactId>bfxy-store-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>-->
-
+        </dependency>
         <!-- hysrtix -->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
@@ -103,6 +97,16 @@
             <artifactId>rocketmq-client</artifactId>
             <version>${rocketmq.version}</version>
         </dependency>
+
+
+
+        <!--项目模块之间的依赖-->
+        <dependency>
+            <groupId>com.bfxy</groupId>
+            <artifactId>bfxy-store-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

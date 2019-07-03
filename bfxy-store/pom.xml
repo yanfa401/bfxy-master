@@ -50,7 +50,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <!-- dubbo -->
-        <!--<dependency>
+        <dependency>
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
             <version>${dubbo.version}</version>
@@ -59,12 +59,16 @@
             <groupId>com.alibaba.boot</groupId>
             <artifactId>dubbo-spring-boot-actuator</artifactId>
             <version>${dubbo.version}</version>
-        </dependency>-->
-        <!--<dependency>
+        </dependency>
+
+
+
+        <!--项目之间依赖-->
+        <dependency>
             <groupId>com.bfxy</groupId>
             <artifactId>bfxy-store-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>-->
+        </dependency>
     </dependencies>
 
     <build>
