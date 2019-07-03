@@ -50,6 +50,8 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <!-- DataBase -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
