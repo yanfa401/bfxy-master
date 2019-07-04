@@ -1,11 +1,13 @@
-package com.bfxy.bfxyorder.entity;
+package com.bfxy.bfxyorder.entity.po;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -17,6 +19,7 @@ import lombok.ToString;
 @Data
 @Table(name = "tb_order")
 @ToString
+@NoArgsConstructor
 public class Order implements Serializable {
     
     private static final long serialVersionUID = 1L;

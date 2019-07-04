@@ -3,8 +3,9 @@ package com.bfxy.bfxyorder.mapper;
 import java.util.Date;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
-import com.bfxy.bfxyorder.entity.Order;
+import com.bfxy.bfxyorder.entity.po.Order;
 
 
 public interface OrderMapper {
