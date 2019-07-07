@@ -6,6 +6,7 @@
     <modules>
         <module>bfxy-store-api</module>
         <module>bfxy-pay-a</module>
+        <module>bfxy-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

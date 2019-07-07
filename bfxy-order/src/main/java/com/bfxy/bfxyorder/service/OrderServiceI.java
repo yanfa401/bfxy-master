@@ -1,6 +1,7 @@
 package com.bfxy.bfxyorder.service;
 
 import com.bfxy.bfxyorder.entity.dto.OrderDto;
+import com.bfxy.common.dto.Result;
 
 public interface OrderServiceI {
     
@@ -9,5 +10,5 @@ public interface OrderServiceI {
      * @param orderDto
      * @return
      */
-    boolean createOrder(OrderDto orderDto);
+    Result createOrder(OrderDto orderDto);
 }

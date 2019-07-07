@@ -152,11 +152,11 @@
   </update>
 
     <select id="selectVersion" resultType="int">
-  	select version from t_store ts
-  				   where ts.supplier_id = #{supplierId,jdbcType=VARCHAR}
-  				   		 and 
-  				   		 ts.goods_id = #{goodsId,jdbcType=VARCHAR}
-  </select>
+  	select version
+  	  from t_store ts
+  	where ts.supplier_id = #{supplierId,jdbcType=VARCHAR}
+  	and ts.goods_id = #{goodsId,jdbcType=VARCHAR}
+    </select>
 
     <update id="updateStoreCountByVersion">
     update t_store ts

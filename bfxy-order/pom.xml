@@ -112,6 +112,11 @@
             <artifactId>bfxy-store-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.bfxy</groupId>
+            <artifactId>bfxy-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
