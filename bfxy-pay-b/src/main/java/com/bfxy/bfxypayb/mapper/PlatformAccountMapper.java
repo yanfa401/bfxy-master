@@ -1,7 +1,10 @@
 package com.bfxy.bfxypayb.mapper;
 
+import org.springframework.stereotype.Repository;
+
 import com.bfxy.bfxypayb.entity.PlatformAccount;
 
+@Repository
 public interface PlatformAccountMapper {
     int deleteByPrimaryKey(String accountId);
 
