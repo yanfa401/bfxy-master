@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bfxy.bfxyorder.entity.po.Order;
 
-
+@Repository
 public interface OrderMapper {
     int deleteByPrimaryKey(String orderId);
 

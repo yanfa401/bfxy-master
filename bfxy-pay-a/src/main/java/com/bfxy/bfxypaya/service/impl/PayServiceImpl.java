@@ -6,16 +6,23 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.client.producer.TransactionMQProducer;
 import org.apache.rocketmq.client.producer.TransactionSendResult;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bfxy.bfxypaya.config.mq.CallBackProducer;
+import com.bfxy.bfxypaya.config.mq.TransactionListenerImpl;
 import com.bfxy.bfxypaya.entity.CustomerAccount;
 import com.bfxy.bfxypaya.mapper.CustomerAccountMapper;
 import com.bfxy.bfxypaya.service.PayServiceI;
@@ -45,6 +52,9 @@ public class PayServiceImpl implements PayServiceI {
     //消息producer
     @Resource(name = "txnProducer")
     private TransactionMQProducer txnProducer;
+    
+    @Resource(name = "callBackOrderProducer")
+    private DefaultMQProducer callBackProducer;
     
     /**
      * 支付
@@ -95,6 +105,19 @@ public class PayServiceImpl implements PayServiceI {
             try {
                 TransactionSendResult sendResult = txnProducer.sendMessageInTransaction(message, params);
                 log.debug("sendResult:"+sendResult);
+                //如果发送成功,则通知order支付成功消息
+                if (sendResult.getSendStatus() == SendStatus.SEND_OK) {
+                    Map<String, Object> p2 = new HashMap<>();
+                    p2.put("userId", userId);
+                    p2.put("orderId", orderId);
+                    p2.put("status", "2");	//ok
+                    Message callBackMsg = new Message("CALL_BACK_PAY_TOPIC","CALL_BACK_PAY", keys, JSONObject.toJSONString(p2).getBytes());
+                    try {
+                        callBackProducer.send(callBackMsg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             } catch (MQClientException e) {
                 log.error("MQ发送异常,记录到数据库某个表中,并提醒管理员进行人工干预;错误信息:{}", e.getMessage());
             }
