@@ -1,14 +1,21 @@
 package com.bfxy.bfxyorder.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONObject;
+import com.bfxy.bfxyorder.config.mq.producer.OrderlyProducer;
 import com.bfxy.bfxyorder.constants.OrderStateEnum;
 import com.bfxy.bfxyorder.entity.dto.OrderDto;
 import com.bfxy.bfxyorder.entity.po.Order;
@@ -109,5 +116,54 @@ public class OrderServiceImpl implements OrderServiceI {
         else {
             return Result.builder().success(false).msg("库存不足,交易失败").data(null).build();
         }
+    }
+    
+    public static final String PKG_TOPIC = "pkg_topic";
+    
+    public static final String PKG_TAG = "pkg_tag";
+    
+    @Autowired
+    private OrderlyProducer orderlyProducer;
+    
+    @Override
+    public void sendOrderlyMessage4Pkg(String userId, String orderId) {
+        List<Message> messageList = new ArrayList<>();
+    
+        Map<String, Object> params1 = new HashMap<>();
+        params1.put("userId", userId);
+        params1.put("orderId", orderId);
+        params1.put("text", "创建包裹操作---1");
+        
+        String key1 = UUID.randomUUID().toString() + "$" + System.currentTimeMillis();
+        Message message1 = new Message(PKG_TOPIC, PKG_TAG, key1, JSONObject.toJSONString(params1).getBytes());
+        messageList.add(message1);
+    
+    
+        Map<String, Object> params2 = new HashMap<>();
+        params2.put("userId", userId);
+        params2.put("orderId", orderId);
+        params2.put("text", "发送物流通知操作---2");
+    
+        String key2 = UUID.randomUUID().toString() + "$" + System.currentTimeMillis();
+        Message message2 = new Message(PKG_TOPIC, PKG_TAG, key2, JSONObject.toJSONString(params2).getBytes());
+        messageList.add(message2);
+    
+    
+        Map<String, Object> params3 = new HashMap<>();
+        params3.put("userId", userId);
+        params3.put("orderId", orderId);
+        params3.put("text", "发送优惠券---3");
+    
+        String key3 = UUID.randomUUID().toString() + "$" + System.currentTimeMillis();
+        Message message3 = new Message(PKG_TOPIC, PKG_TAG, key3, JSONObject.toJSONString(params3).getBytes());
+        messageList.add(message3);
+        
+        //顺序消息投递是 应该按照 order表中 supplierId 和 messageQueueId 进行绑定,专门有张表维护才对
+        Order order = orderMapper.selectByPrimaryKey(orderId);
+        Integer messageQueueNumber = Integer.parseInt(order.getSupplierId());
+    
+        //对应的顺序消息的生产者,把MessageList 发送出去
+        orderlyProducer.sendOrderlyMsg(messageList, messageQueueNumber);
+    
     }
 }

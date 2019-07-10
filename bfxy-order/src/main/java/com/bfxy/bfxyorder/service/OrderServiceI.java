@@ -11,4 +11,6 @@ public interface OrderServiceI {
      * @return
      */
     Result createOrder(OrderDto orderDto);
+    
+    void sendOrderlyMessage4Pkg(String userId, String orderId);
 }

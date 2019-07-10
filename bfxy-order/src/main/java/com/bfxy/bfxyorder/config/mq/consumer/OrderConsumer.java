@@ -22,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bfxy.bfxyorder.mapper.OrderMapper;
+import com.bfxy.bfxyorder.service.OrderServiceI;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,8 +46,11 @@ public class OrderConsumer {
     @Value("${mq.group.order.callback}")
     private String CONSUMER_GROUP_NAME;
     
-    @Value("${mq.topic.pay}")
+    @Value("${mq.topic.callback}")
     private String topic;
+    
+    @Autowired
+    private OrderServiceI orderServiceI;
     
     @PostConstruct
     public void consume() throws MQClientException {
@@ -90,6 +94,11 @@ public class OrderConsumer {
                 //修改订单表中订单状态
                 int result = orderMapper.updateOrderStatus(orderId, status, "xielei", new Date());
                 System.out.println("修改了" + result + "条数据");
+                if (result == 1) {
+                    //如果数据修改成功
+                    orderServiceI.sendOrderlyMessage4Pkg(userId, orderId);
+                }
+                
     
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
