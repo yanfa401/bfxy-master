@@ -58,7 +58,8 @@ public class PkgOrderlyConsumer {
     class PkgOrderlyListener implements MessageListenerOrderly {
     
         @Override
-        public ConsumeOrderlyStatus consumeMessage(List<MessageExt> list, ConsumeOrderlyContext consumeOrderlyContext) {
+        public ConsumeOrderlyStatus consumeMessage(List<MessageExt> list, ConsumeOrderlyContext context) {
+            context.setAutoCommit(true);
             for (MessageExt msg : list) {
                 try {
                     String topic = msg.getTopic();
